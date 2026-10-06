@@ -2,6 +2,8 @@ import random
 import time
 money = 500
 day = 1
+hour = 9
+minute = 0
 computers = [
     {"id": 1, "working": True},
     {"id": 2, "working": True},
@@ -46,11 +48,29 @@ customers = [
         "spending": 20
     }
 ]
+def show_time():
+    period = "AM"
+    display_hour = hour
+    if hour >= 12:
+        period = "PM"
+    if hour > 12:
+        display_hour = hour - 12
+    if display_hour == 0:
+        display_hour = 12
+    return f"{display_hour}:{minute:02d} {period}"
+def advance_time(minutes):
+    global hour
+    global minute
+    minute += minutes
+    while minute >= 60:
+        minute -= 60
+        hour += 1
 def show_status():
     print("\n==============================")
     print("      INTERNET CAFÉ 2007")
     print("==============================")
-    print(f"Day: ${day}")
+    print(f"Day: {day}")
+    print(f"Time: {show_time()}")
     print(f"Money: ${money}")
     working = 0
     for computer in computers:
@@ -75,18 +95,31 @@ def get_customer():
     print(f"They need: {customer['need']}")
     print(f"Patience: {customer['patience']}")
     return customer
-customer = get_customer()
-computer = random.choice(working_computers)
-print(f"\n{customer['name']} uses Computer {computer['id']}.")
-print(f"They are here to {customer['need']}.")
-time.sleep(2)
-earnings = random.randint(
-    5,
-    customer["spending"]
-)
-money += earnings
-print(f"\n{customer['name']} pays ${earnings}.")
-print(f"You now have ${money}.")
+def serve_customer():
+    global money
+    working_computers = []
+    for computer in computers:
+        if computer["working"]:
+            working_computers.append(computer)
+    if len(working_computers) == 0:
+        print("\nThere are no working computers!")
+        print("The customer leaves angry.")
+        return
+    customer = get_customer()
+    computer = random.choice(working_computers)
+    print(f"\n{customer['name']} uses Computer {computer['id']}.")
+    print(f"They are here to {customer['need']}.")
+    session_time = random.randint(10, 45)
+    print(f"They stay for {session_time} minutes.")
+    time.sleep(2)
+    advance_time(session_time)
+    earnings = random.randint(
+        5,
+        customer["spending"]
+    )
+    money += earnings
+    print(f"\n{customer['name']} pays ${earnings}.")
+    print(f"You now have ${money}.")
 def random_event():
     global money
     event = random.randint(1, 10)
@@ -95,7 +128,9 @@ def random_event():
         if broken["working"]:
             broken["working"] = False
             print("\n⚠️ OH NO!")
-            print(f"Computer {broken['id']} has broken!")
+            print(
+                f"Computer {broken['id']} has broken!"
+            )
     elif event == 2:
         print("\nThe electricity flickers...")
         print("Luckily, it comes back.")
@@ -109,6 +144,8 @@ def random_event():
         print("\nNothing unusual happens.")
 def game():
     global day
+    global hour
+    global minute
     print("\n================================")
     print("       INTERNET CAFÉ 2007")
     print("================================")
@@ -117,6 +154,16 @@ def game():
     print("Your goal:")
     print("SURVIVE AND MAKE MONEY.\n")
     while True:
+        if hour >= 22:
+            print("\nIt is 10 PM.")
+            print("The café is closing.")
+            day += 1
+            hour = 9
+            minute = 0
+            print(
+                f"\nDay {day} begins at 9:00 AM."
+            )
+            continue
         show_status()
         print("What do you want to do?")
         print("1. Serve a customer")
@@ -132,7 +179,11 @@ def game():
         elif choice == "3":
             print("\nYou close the café for the night.")
             day += 1
-            print(f"\n🌙 Day {day} begins tomorrow.")
+            hour = 9
+            minute = 0
+            print(
+                f"\nDay {day} begins tomorrow."
+            )
         elif choice == "4":
             print("\nThanks for playing!")
             break
