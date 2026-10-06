@@ -10,11 +10,41 @@ computers = [
     {"id": 5, "working": True}
 ]
 customers = [
-    "student",
-    "office worker",
-    "gamer",
-    "email user",
-    "random customer"
+    {
+        "name": "Ahmed",
+        "type": "student",
+        "need": "research",
+        "patience": 5,
+        "spending": 20
+    },
+    {
+        "name": "Sara",
+        "type": "student",
+        "need": "email",
+        "patience": 4,
+        "spending": 15
+    },
+    {
+        "name": "Bilal",
+        "type": "gamer",
+        "need": "gaming",
+        "patience": 3,
+        "spending": 30
+    },
+    {
+        "name": "Mr. Khan",
+        "type": "office worker",
+        "need": "work",
+        "patience": 6,
+        "spending": 40
+    },
+    {
+        "name": "Ayesha",
+        "type": "email user",
+        "need": "email",
+        "patience": 5,
+        "spending": 20
+    }
 ]
 def show_status():
     print("\n==============================")
