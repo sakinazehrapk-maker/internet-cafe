@@ -70,27 +70,23 @@ def get_customer():
     customer = random.choice(customers)
     print("\nA customer walks into the café...")
     time.sleep(1)
-    print(f"They are a {customer}.")
+    print(f"\nName: {customer['name']}")
+    print(f"Type: {customer['type']}")
+    print(f"They need: {customer['need']}")
+    print(f"Patience: {customer['patience']}")
     return customer
-def serve_customer():
-    global money
-    working_computers = []
-    for computer in computers:
-        if computer["working"]:
-            working_computers.append(computer)
-    if len(working_computers) == 0:
-        print("\nThere are no working computers!")
-        print("The customer leaves angry.")
-        return
-    customer = get_customer()
-    computer = random.choice(working_computers)
-    print(f"\nCustomer uses Computer {computer['id']}.")
-    print("They use the internet...")
-    time.sleep(2)
-    earnings = random.randint(10, 30)
-    money += earnings
-    print(f"\nCustomer pays ${earnings}.")
-    print(f"You now have ${money}.")
+customer = get_customer()
+computer = random.choice(working_computers)
+print(f"\n{customer['name']} uses Computer {computer['id']}.")
+print(f"They are here to {customer['need']}.")
+time.sleep(2)
+earnings = random.randint(
+    5,
+    customer["spending"]
+)
+money += earnings
+print(f"\n{customer['name']} pays ${earnings}.")
+print(f"You now have ${money}.")
 def random_event():
     global money
     event = random.randint(1, 10)
