@@ -5,11 +5,46 @@ day = 1
 hour = 9
 minute = 0
 computers = [
-    {"id": 1, "working": True},
-    {"id": 2, "working": True},
-    {"id": 3, "working": True},
-    {"id": 4, "working": True},
-    {"id": 5, "working": True}
+    {
+        "id": 1,
+        "working": True,
+        "condition": 95,
+        "speed": 3,
+        "price": 15,
+        "customer": None
+    },
+    {
+        "id": 2,
+        "working": True,
+        "condition": 80,
+        "speed": 2,
+        "price": 12,
+        "customer": None
+    },
+    {
+        "id": 3,
+        "working": True,
+        "condition": 65,
+        "speed": 1,
+        "price": 10,
+        "customer": None
+    },
+    {
+        "id": 4,
+        "working": True,
+        "condition": 90,
+        "speed": 3,
+        "price": 15,
+        "customer": None
+    },
+    {
+        "id": 5,
+        "working": True,
+        "condition": 50,
+        "speed": 1,
+        "price": 8,
+        "customer": None
+    }
 ]
 customers = [
     {
