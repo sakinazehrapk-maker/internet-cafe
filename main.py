@@ -114,13 +114,33 @@ def show_status():
     print(f"Computers working: {working}/{len(computers)}")
     print("==============================\n")
 def show_computers():
-    print("\nCOMPUTERS")
+    print("\n========== COMPUTERS ==========")
     for computer in computers:
         if computer["working"]:
             status = "WORKING"
         else:
             status = "BROKEN"
-        print(f"Computer {computer['id']}: {status}")
+        print(
+            f"\nComputer {computer['id']}"
+        )
+        print(
+            f"Status: {status}"
+        )
+        print(
+            f"Condition: {computer['condition']}%"
+        )
+        print(
+            f"Speed: {computer['speed']}/3"
+        )
+        print(
+            f"Price: ${computer['price']}"
+        )
+        if computer["customer"] is not None:
+            print(
+                f"Customer: {computer['customer']}"
+            )
+        else:
+            print("Customer: Empty")
 def get_customer():
     customer = random.choice(customers)
     print("\nA customer walks into the café...")
@@ -142,6 +162,14 @@ def serve_customer():
         return
     customer = get_customer()
     computer = random.choice(working_computers)
+    if customer["need"] == "gaming":
+        fast_computers = []
+    for pc in working_computers:
+        if pc["speed"] >= 2:
+            fast_computers.append(pc)
+    if len(fast_computers) > 0:
+        computer = random.choice(fast_computers)
+        computer["customer"] = customer["name"]
     print(f"\n{customer['name']} uses Computer {computer['id']}.")
     print(f"They are here to {customer['need']}.")
     session_time = random.randint(10, 45)
@@ -155,6 +183,7 @@ def serve_customer():
     money += earnings
     print(f"\n{customer['name']} pays ${earnings}.")
     print(f"You now have ${money}.")
+    computer["customer"] = None
 def random_event():
     global money
     event = random.randint(1, 10)
