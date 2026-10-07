@@ -176,6 +176,14 @@ def serve_customer():
     print(f"They stay for {session_time} minutes.")
     time.sleep(2)
     advance_time(session_time)
+    wear = random.randint(1, 5)
+    computer["condition"] -= wear
+    if computer["condition"] < 0:
+        computer["condition"] = 0
+        print(
+            f"Computer {computer['id']} loses "
+            f"{wear}% condition."
+            )
     earnings = random.randint(
         5,
         customer["spending"]
