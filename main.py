@@ -141,6 +141,56 @@ def show_computers():
             )
         else:
             print("Customer: Empty")
+def repair_computer():
+    global money
+    show_computers()
+    print("\nWhich computer do you want to repair?")
+    print("Enter the computer number.")
+    print("Enter 0 to cancel.")
+    choice = input("\n> ")
+    if choice == "0":
+        return
+    if not choice.isdigit():
+        print("\nPlease enter a number.")
+        return
+    computer_id = int(choice)
+    computer = None
+    for pc in computers:
+        if pc["id"] == computer_id:
+            computer = pc
+            break
+    if computer is None:
+        print("\nThat computer doesn't exist.")
+        return
+    if computer["condition"] >= 100:
+        print("\nThat computer doesn't need repairs.")
+        return
+    repair_amount = 100 - computer["condition"]
+    repair_cost = repair_amount // 2
+    if repair_cost < 5:
+        repair_cost = 5
+    print(
+        f"\nRepairing Computer {computer['id']} "
+        f"will cost ${repair_cost}."
+    )
+    confirm = input("Repair it? (y/n): ").lower()
+    if confirm != "y":
+        print("\nRepair cancelled.")
+        return
+    if money < repair_cost:
+        print("\nYou don't have enough money!")
+        return
+    money -= repair_cost
+    computer["condition"] = 100
+    computer["working"] = True
+    print(
+        f"\nComputer {computer['id']} "
+        "has been completely repaired!"
+    )
+    print(f"You spent ${repair_cost}.")
+    print(f"You now have ${money}.")
+    advance_time(15)
+    print("Repair took 15 minutes.")
 def get_customer():
     customer = random.choice(customers)
     print("\nA customer walks into the café...")
@@ -240,8 +290,9 @@ def game():
         print("What do you want to do?")
         print("1. Serve a customer")
         print("2. Check computers")
-        print("3. End the day")
-        print("4. Quit")
+        print("3. Repair a computer")
+        print("4. End the day")
+        print("5. Quit")
         choice = input("\n> ")
         if choice == "1":
             serve_customer()
@@ -249,6 +300,8 @@ def game():
         elif choice == "2":
             show_computers()
         elif choice == "3":
+            repair_computer()
+        elif choice == "4":
             print("\nYou close the café for the night.")
             day += 1
             hour = 9
@@ -256,7 +309,7 @@ def game():
             print(
                 f"\nDay {day} begins tomorrow."
             )
-        elif choice == "4":
+        elif choice == "5":
             print("\nThanks for playing!")
             break
         else:
