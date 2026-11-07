@@ -4,6 +4,9 @@ money = 500
 day = 1
 hour = 9
 minute = 0
+electricity = True
+ups_owned = False
+outage_count = 0
 computers = [
     {
         "id": 1,
@@ -254,8 +257,7 @@ def random_event():
                 f"Computer {broken['id']} has broken!"
             )
     elif event == 2:
-        print("\nThe electricity flickers...")
-        print("Luckily, it comes back.")
+        electricity_outage()
     elif event == 3:
         print("\nSomeone calls the café.")
         print("They ask about your internet prices.")
@@ -264,6 +266,48 @@ def random_event():
         print("You decide to keep it.")
     else:
         print("\nNothing unusual happens.")
+def electricity_outage():
+    global electricity
+    global outage_count
+    global money
+    print("\n" + "=" * 35)
+    print("ELECTRICITY OUTAGE!")
+    print("=" * 35)
+    electricity = False
+    outage_count += 1
+    print("\nThe entire café goes dark!")
+    if ups_owned:
+        print("\nYour UPS activates!")
+        print("The computers are still running.")
+        outage_duration = random.randint(10, 30)
+        print(
+            f"Electricity will return in "
+            f"{outage_duration} minutes."
+        )
+        advance_time(outage_duration)
+        electricity = True
+        print("\nElectricity is back!")
+        return
+    print("\nYou don't have a UPS!")
+    print("All computers shut down.")
+    outage_duration = random.randint(20, 60)
+    print(
+        f"\nThe outage lasts {outage_duration} minutes."
+    )
+    for computer in computers:
+        if computer["customer"] is not None:
+            print(
+                f"\n{computer['customer']} "
+                "leaves without paying!"
+            )
+            computer["customer"] = None
+            computer["condition"] -= 5
+            if computer["condition"] < 0:
+                computer["condition"] = 0
+    advance_time(outage_duration)
+    electricity = True
+    print("\nElectricity has returned!")
+    print("You can reopen the café.")
 def game():
     global day
     global hour
