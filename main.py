@@ -110,6 +110,14 @@ def show_status():
     print(f"Day: {day}")
     print(f"Time: {show_time()}")
     print(f"Money: ${money}")
+    if electricity:
+        print("Electricity: ON")
+    else:
+        print("Electricity: OFF")
+    if ups_owned:
+            print("UPS: Installed")
+    else:
+            print("UPS: Not installed")
     working = 0
     for computer in computers:
         if computer["working"]:
@@ -209,6 +217,10 @@ def serve_customer():
     for computer in computers:
         if computer["working"]:
             working_computers.append(computer)
+    if not electricity:
+        print("\nThe electricity is out!")
+        print("You cannot serve customers right now.")
+        return
     if len(working_computers) == 0:
         print("\nThere are no working computers!")
         print("The customer leaves angry.")
@@ -308,6 +320,30 @@ def electricity_outage():
     electricity = True
     print("\nElectricity has returned!")
     print("You can reopen the café.")
+def buy_ups():
+    global money
+    global ups_owned
+    if ups_owned:
+        print("\nYou already own a UPS!")
+        return
+    ups_price = 200
+    print("\n========== UPS SYSTEM ==========")
+    print("A UPS provides backup electricity.")
+    print(f"Price: ${ups_price}")
+    print("Protects your computers during outages.")
+    print("================================")
+    choice = input("\nBuy UPS? (y/n): ").lower()
+    if choice != "y":
+        print("\nPurchase cancelled.")
+        return
+    if money < ups_price:
+        print("\nYou don't have enough money!")
+        return
+    money -= ups_price
+    ups_owned = True
+    print("\nCongratulations!")
+    print("You purchased a UPS!")
+    print(f"Remaining money: ${money}")
 def game():
     global day
     global hour
@@ -335,8 +371,9 @@ def game():
         print("1. Serve a customer")
         print("2. Check computers")
         print("3. Repair a computer")
-        print("4. End the day")
-        print("5. Quit")
+        print("4. Buy UPS")
+        print("5. End the day")
+        print("6. Quit")
         choice = input("\n> ")
         if choice == "1":
             serve_customer()
@@ -346,6 +383,8 @@ def game():
         elif choice == "3":
             repair_computer()
         elif choice == "4":
+            buy_ups()
+        elif choice == "5":
             print("\nYou close the café for the night.")
             day += 1
             hour = 9
@@ -353,7 +392,7 @@ def game():
             print(
                 f"\nDay {day} begins tomorrow."
             )
-        elif choice == "5":
+        elif choice == "6":
             print("\nThanks for playing!")
             break
         else:
